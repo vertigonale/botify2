@@ -1,0 +1,96 @@
+# local folders
+/BasicMusicPlayer_nameisjayant/*
+
+/local.properties
+/.idea/navEditor.xml
+.DS_Store
+/captures
+.cxx
+
+### Android ###
+# Built application files
+*.apk
+*.ap_
+*.aab
+
+# Android Studio Navigation editor temp files
+.navigation/
+
+# Android Studio captures folder
+captures/
+
+# Files for the ART/Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+# Generated files
+bin/
+gen/
+out/
+release/
+
+# Gradle files
+.gradle/
+build/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Log Files
+*.log
+
+# IntelliJ
+*.iml
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/assetWizardSettings.xml
+.idea/dictionaries
+.idea/libraries
+
+# Android Studio 3 in .gitignore file.
+.idea/caches
+.idea/modules.xml
+# Comment next line if keeping position of elements in Navigation Editor is relevant for you
+# .idea/navEditor.xml
+
+# External native build folder generated in Android Studio 2.2 and later
+.externalNativeBuild
+
+### Android Patch ###
+gen-external-apklibs
+output.json
+
+# Replacement of .externalNativeBuild directories introduced
+# with Android Studio 3.5.
+.cxx/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+
+### Gradle ###
+.gradle
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache
+
+# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
+# gradle/wrapper/gradle-wrapper.properties
+
+### Gradle Patch ###
+**/build/
+
+### AndroidStudio Patch ###
+
+!/gradle/wrapper/gradle-wrapper.jar
+
