@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".menu.sub.about.AboutFragment">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.618">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/entryImageContent"
+                app:srcCompat="@drawable/xmchn2_entry" />
+        </FrameLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.3" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/about_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_weight="0.3" >-->
+
+            <TextView
+                android:id="@+id/biography_text1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_left"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="@dimen/padding_left"
+                android:gravity="center_horizontal"
+                android:text="@string/biography1"
+                android:textAlignment="center"
+                android:textSize="@dimen/biography_textsize"
+                app:layout_constraintBottom_toTopOf="@id/biography_text2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/biography_text2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_left"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="@dimen/padding_left"
+                android:gravity="center_horizontal"
+                android:text="@string/biography2"
+                android:textAlignment="center"
+                android:textSize="@dimen/biography_textsize"
+                app:layout_constraintBottom_toTopOf="@id/biography_website"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/biography_text1" />
+
+            <TextView
+                android:id="@+id/biography_website"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_left"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="@dimen/padding_left"
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                android:gravity="center_horizontal"
+                android:shadowColor="@color/teal_700"
+                android:text="@string/biography3"
+                android:textAlignment="center"
+                android:textColor="@color/teal_200"
+                android:textSize="@dimen/biography_textsize"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/biography_text2" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.082">
+
+            <TextView
+                android:id="@+id/subAboutMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32sp"
+                android:layout_marginLeft="32sp"
+                android:fontFamily="@font/front_page_n"
+                android:text="@string/menu_about"
+                android:textSize="@dimen/menu_title"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/buttonAboutToMain"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/buttonAboutToMain"
+                android:layout_width="@dimen/button_check_main_width"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginEnd="32sp"
+                android:layout_marginRight="32sp"
+                android:text="@string/previous"
+                android:textSize="@dimen/entryButtonSize"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/subAboutMenu"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</layout>

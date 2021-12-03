@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1sp</item>
+        <item name="android:layout_marginLeft">@dimen/padding_left</item>
+        <item name="android:layout_marginRight">@dimen/padding_left</item>
+        <item name="android:color">@color/teal_200</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
+    <style name="divider_full">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1sp</item>
+        <item name="android:color">@color/teal_200</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
+</resources>

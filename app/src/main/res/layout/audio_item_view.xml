@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android" >
+
+        <TextView
+            android:id="@+id/audio_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_audio_item"
+            android:layout_marginBottom="@dimen/margin_audio_item"
+            android:gravity="center_horizontal"
+            android:paddingStart="16sp"
+            android:paddingLeft="@dimen/padding_left"
+            android:paddingTop="@dimen/padding_between"
+            android:paddingEnd="16sp"
+            android:textAlignment="center"
+            android:textSize="@dimen/audio_item_textsize"
+        />
+</layout>

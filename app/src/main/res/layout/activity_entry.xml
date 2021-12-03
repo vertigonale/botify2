@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".EntryActivity">
+
+        <TextView
+            android:id="@+id/entryName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24sp"
+            android:layout_marginBottom="8sp"
+            android:fontFamily="@font/front_page_n"
+            android:text="@string/entryName"
+            android:textColor="@color/teal_200"
+            android:textColorHighlight="@color/teal_200"
+            android:textSize="@dimen/entryNameSize"
+            app:layout_constraintBottom_toTopOf="@id/entryImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/entryImage"
+            android:layout_width="wrap_content"
+            android:layout_height="412sp"
+            android:contentDescription="@string/entryImageContent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/xmchn2_entry" />
+
+        <Button
+            android:id="@+id/entryButton"
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginTop="8sp"
+            android:layout_marginBottom="24sp"
+            android:fontFamily="@font/front_page_n"
+            android:text="@string/entryButtonText"
+            android:textSize="@dimen/entryButtonSize"
+            app:backgroundTint="@color/teal_200"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/entryImage" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

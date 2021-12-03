@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".menu.main.MainFragment">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.618">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/entryImageContent"
+                app:srcCompat="@drawable/xmchn2_entry" />
+        </FrameLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.3">
+
+            <Button
+                android:id="@+id/buttonToAudioSubmenu"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginTop="8sp"
+                android:fontFamily="@font/front_page_n"
+                android:text="@string/buttonAudio"
+                android:textSize="@dimen/entryButtonSize"
+                app:layout_constraintBottom_toTopOf="@id/buttonToVideoSubmenu"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/buttonToVideoSubmenu"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="@dimen/button_height"
+                android:fontFamily="@font/front_page_n"
+                android:text="@string/buttonVideo"
+                android:textSize="@dimen/entryButtonSize"
+                app:layout_constraintBottom_toTopOf="@+id/buttonToImagesSubmenu"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonToAudioSubmenu" />
+
+            <Button
+                android:id="@+id/buttonToImagesSubmenu"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="@dimen/button_height"
+                android:fontFamily="@font/front_page_n"
+                android:text="@string/buttonImages"
+                android:textSize="@dimen/entryButtonSize"
+                app:layout_constraintBottom_toTopOf="@+id/buttonToAboutSubmenu"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonToVideoSubmenu" />
+
+            <Button
+                android:id="@+id/buttonToAboutSubmenu"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginBottom="8sp"
+                android:fontFamily="@font/front_page_n"
+                android:text="@string/buttonAbout"
+                android:textSize="@dimen/entryButtonSize"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonToImagesSubmenu" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.082">
+
+            <TextView
+                android:id="@+id/mainMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32sp"
+                android:layout_marginLeft="32sp"
+                android:fontFamily="@font/front_page_n"
+                android:text="@string/menu_main"
+                android:textSize="@dimen/menu_title"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/buttonToUpdateSubmenu"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/buttonToUpdateSubmenu"
+                android:layout_width="@dimen/button_check_main_width"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginEnd="32sp"
+                android:layout_marginRight="32sp"
+                android:fontFamily="@font/front_page_n"
+                android:text="@string/buttonUpdate"
+                android:textSize="@dimen/entryButtonSize"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/mainMenu"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+</layout>
