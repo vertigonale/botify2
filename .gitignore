@@ -7,6 +7,11 @@
 /captures
 .cxx
 
+# drawable and raw files
+app/src/main/res/drawable/*.jpeg
+app/src/main/res/drawable/*.jpg
+app/src/main/res/raw
+
 ### Android ###
 # Built application files
 *.apk
