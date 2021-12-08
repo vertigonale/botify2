@@ -6,7 +6,7 @@
 .DS_Store
 /captures
 .cxx
-# nevermind me, I'm just a test again
+# nevermind me, I'm just a test
 # drawable and raw files
 app/src/main/res/drawable/*.jpeg
 app/src/main/res/drawable/*.jpg
