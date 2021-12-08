@@ -7,7 +7,6 @@ import androidx.databinding.DataBindingUtil
 import com.example.android.botify.databinding.ActivityEntryBinding
 import com.example.android.botify.menu.main.MainActivity
 
-// test comment
 class EntryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEntryBinding
