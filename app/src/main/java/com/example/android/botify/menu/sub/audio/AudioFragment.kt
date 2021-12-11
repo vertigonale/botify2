@@ -23,6 +23,7 @@ class AudioFragment : Fragment(), AudioListener {
     // media player
     private var mediaPlayer: MediaPlayer? = null
     private lateinit var runnable:Runnable
+    //TODO what to use apart from handler (deprecated)
     private var handler: Handler = Handler()
     private var pause:Boolean = false
 
