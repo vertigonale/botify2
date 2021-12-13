@@ -48,7 +48,8 @@
     <fragment
         android:id="@+id/audioFragment"
         android:name="com.example.android.botify.menu.sub.audio.AudioFragment"
-        android:label="AudioFragment" >
+        android:label="AudioFragment"
+        tools:layout="@layout/fragment_audio">
         <action
             android:id="@+id/action_AudioFragment_to_MainFragment"
             app:destination="@id/MainFragment"
@@ -58,7 +59,8 @@
     <fragment
         android:id="@+id/imageFragment"
         android:name="com.example.android.botify.menu.sub.image.ImageFragment"
-        android:label="ImageFragment" >
+        android:label="ImageFragment"
+        tools:layout="@layout/fragment_image">
         <action
             android:id="@+id/action_ImageFragment_to_MainFragment"
             app:destination="@id/MainFragment"
@@ -71,7 +73,8 @@
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.example.android.botify.menu.sub.about.AboutFragment"
-        android:label="AboutFragment" >
+        android:label="AboutFragment"
+        tools:layout="@layout/fragment_about">
         <action
             android:id="@+id/action_AboutFragment_to_MainFragment"
             app:destination="@id/MainFragment"
