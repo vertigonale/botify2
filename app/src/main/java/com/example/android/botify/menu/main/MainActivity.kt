@@ -14,15 +14,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.i("MainFragment", "onCreate")
+        Log.i("MainActivity", "onCreate")
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setSupportActionBar(binding.toolbar)
     }
 
+    //TODO check if necessary (app runs without crashes when commented out)
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        Log.i("MainActivity", "onCreateOptionsMenu")
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
+        Log.i("MainActivity", "Menu Inflated?")
         return true
     }
 
