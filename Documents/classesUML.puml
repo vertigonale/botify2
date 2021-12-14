@@ -1,0 +1,49 @@
+@startuml
+'comment
+
+' packages
+package "menu" {
+    class EntryActivity {
+        binding: ActivityEntryBinding
+        onCreate(Bundle?): Unit
+    }
+
+    package "main" {
+        class MainActivity
+        class MainFragment
+    }
+
+    package "sub" {
+        package "about" {
+            class AboutFragment
+        }
+
+        package "audio" {
+            class AudioFragment
+            class AudioAdapter
+            class Audio
+            interface AudioListener
+        'TODO how to handle "Audios.kt"
+        }
+
+        package "image" {
+            class ImageFragment
+            class ImageAdapter
+            class Image
+            class ImageDetailFragment
+            interface ImageListener
+        'TODO how to handle "Images.kt"
+
+        }
+
+        package "video" {
+            class VideoFragment
+        }
+    }
+}
+
+' dependencies
+    AudioListener <|-- AudioFragment
+    ImageListener <|-- ImageFragment
+
+@enduml
