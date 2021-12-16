@@ -3,41 +3,155 @@
 
 ' packages
 package "menu" {
+
     class EntryActivity {
         binding: ActivityEntryBinding
+    ' TODO should "Unit" be omitted? it basically means "void"
         onCreate(Bundle?): Unit
     }
 
     package "main" {
-        class MainActivity
-        class MainFragment
+
+        class MainActivity {
+            binding: ActivityMainBinding
+            onCreate(Bundle?): Unit
+            onCreateOptionsMenu(Menu): Boolean
+            onDestroy(): Unit
+        }
+
+        class MainFragment {
+            binding: FragmentMainBinding
+            onCreateView(LayoutInflater, ViewGroup?, Bundle?): View
+            onViewCreated(View, Bundle?): Unit
+            onDestroy(): Unit
+        }
     }
 
     package "sub" {
+
         package "about" {
-            class AboutFragment
+            class AboutFragment {
+                binding: FragmentAboutBinding
+                onCreateView(LayoutInflater, ViewGroup?, Bundle?): View
+                onViewCreated(View, Bundle?): Unit
+            }
         }
 
         package "audio" {
-            class AudioFragment
-            class AudioAdapter
-            class Audio
-            interface AudioListener
+
+            class AudioFragment {
+                binding: FragmentAudioBinding
+                mediaPlayer: MediaPlayer?
+                runnable: Runnable
+                handler: Handler
+                pause: Boolean
+                audioAdapter: AudioAdapter
+                audioList: List<Audio>
+                onCreateView(LayoutInflater, ViewGroup?, Bundle?): View
+                onViewCreated(View, Bundle?): Unit
+                onAudioClickListener(Int): Unit
+                onStop(): Unit
+                onDestroy(): Unit
+            }
+
+            class AudioAdapter {
+                context: AudioFragment
+                audioList: List<Audio>
+                audioListener: AudioListener
+                AudioAdapter(AudioFragment, List<Audio>, AudioListener)
+                onCreateViewHolder(ViewGroup, Int): AudioAdapter.AudioViewHolder
+                onBindViewHolder(AudioAdapter.AudioViewHolder, Int): Unit
+                getItemCount(): Int
+            }
+
+            class AudioViewHolder {
+                textView: TextView
+                currentAudio: Audio?
+            ' TODO what to do with this pain in the ass?
+                <class intializer>
+                AudioViewHolder(View)
+                bind(Audio): Unit
+            }
+
+            class Audio {
+                id: Long
+                name: String
+                audio: Int?
+                Audio(Long, String, Int?)
+            }
+
+            interface AudioListener {
+                onAudioClickListener(Int): Unit
+            }
         'TODO how to handle "Audios.kt"
         }
 
         package "image" {
-            class ImageFragment
-            class ImageAdapter
-            class Image
-            class ImageDetailFragment
-            interface ImageListener
-        'TODO how to handle "Images.kt"
 
+            class ImageFragment {
+                binding: FragmentImageBinding
+                imageId: Int?
+                imageList: List<Image>
+                imageAdapter: ImageAdapter
+                onCreateView(LayoutInflater, ViewGroup?, (Bundle?)): View
+                onViewCreated(View, Bundle?): Unit
+                onImageClickListener(Image): Unit
+                onStart(): Unit
+                onResume(): Unit
+                onPause(): Unit
+                onStop(): Unit
+                onDestroyView(): Unit
+                onDestroy(): Unit
+            }
+
+            class ImageAdapter {
+                imageList: List<Image>
+                imageListener: ImageListener
+                ImageAdapter(List<Image>, ImageListener)
+                onCreateViewHolder(ViewGroup, Int): ImageAdapter.ImageViewHolder
+                onBindViewHolder(ImageAdapter.ImageViewHolder, Int): Unit
+                getItemCount(): Int
+            }
+
+            class ImageViewHolder {
+                imagePreview: ImageViewHolder
+                currentImage: Image?
+                <class initializer>
+                ImageViewHolder(View)
+                bind(Image): Unit
+            }
+
+            class Image {
+                id: Long
+                image: Int?
+                name: String
+                Image(Long, Int?, String)
+            }
+
+            class ImageDetailFragment {
+                binding: FragmentImageDetailBinding
+                onCreateView(LayoutInflater, ViewGroup?, Bundle?): View?
+                onViewCreated(View, Bundle?): Unit
+                onStart(): Unit
+                onResume(): Unit
+                onPause(): Unit
+                onStop(): Unit
+                onDestroyView(): Unit
+                onDestroy(): Unit
+            }
+
+            interface ImageListener {
+                onImageClickListener(Image): Unit
+            }
+        'TODO how to handle "Images.kt"
         }
 
         package "video" {
-            class VideoFragment
+            class VideoFragment {
+            binding: FragmentVideoBinding
+            onCreateView(LayoutInflater, ViewGroup?, Bundle?): View?
+            onViewCreated(View, Bundle?): Unit
+            }
         }
     }
 }
@@ -45,5 +159,13 @@ package "menu" {
 ' dependencies
     AudioListener <|-- AudioFragment
     ImageListener <|-- ImageFragment
+    AudioAdapter <|-- AudioViewHolder : (+) inner class
+    ImageAdapter <|-- ImageViewHolder : (+) inner class
 
+' output layout
+    main-down[hidden]-sub
+    audio-down[hidden]-about
+    about-down[hidden]-image
+    image-down[hidden]-audio
+    ' sub-down[hidden]-main
 @enduml
