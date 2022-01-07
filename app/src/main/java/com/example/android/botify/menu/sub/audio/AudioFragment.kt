@@ -1,10 +1,17 @@
 package com.example.android.botify.menu.sub.audio
 
+import android.app.Activity
+import android.content.ComponentName
 import android.content.ContentResolver
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.MediaMetadataCompat
+import android.support.v4.media.session.MediaControllerCompat
+import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,21 +25,59 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.botify.R
 import com.example.android.botify.databinding.FragmentAudioBinding
 
-class AudioFragment : Fragment(), AudioListener {
-
-    // media player
-    private var mediaPlayer: MediaPlayer? = null
-    private lateinit var runnable:Runnable
-    //TODO what to use apart from handler (deprecated)
-    private var handler: Handler = Handler()
-    private var pause:Boolean = false
-
-    // audio adapter
+class AudioFragment : Fragment()/*, AudioListener*/ {
+/*    // audio adapter
     private lateinit var audioAdapter: AudioAdapter
     private val audioList = audioList()
+*/
 
     // binding
     private lateinit var binding: FragmentAudioBinding
+
+    private lateinit var audioBrowser: MediaBrowserCompat
+//    private lateinit var volumeControlStream: AudioManager.AudioPlaybackCallback
+
+    private val connectionCallbacks = object : MediaBrowserCompat.ConnectionCallback() {
+
+        override fun onConnected() {
+//            super.onConnected()
+            audioBrowser.sessionToken.also { token ->
+                val audioController = MediaControllerCompat(
+                    context,
+                    token
+                )
+
+                MediaControllerCompat.setMediaController(context as Activity, audioController)
+            }
+
+            buildTransportProtocols()
+        }
+
+        override fun onConnectionSuspended() {
+//            super.onConnectionSuspended()
+        }
+
+        override fun onConnectionFailed() {
+//            super.onConnectionFailed()
+        }
+    }
+
+    private var controllerCallbacks = object : MediaControllerCompat.Callback() {
+
+        override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
+            super.onMetadataChanged(metadata)
+        }
+
+        override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
+            super.onPlaybackStateChanged(state)
+        }
+
+        override fun onSessionDestroyed() {
+            audioBrowser.disconnect()
+            // maybe schedule a reconnection using a new MediaBrowser instance
+        }
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,13 +86,18 @@ class AudioFragment : Fragment(), AudioListener {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_audio, container, false)
 
-        val recyclerView = binding.audioList
+        audioBrowser = MediaBrowserCompat(
+            context,
+            context?.let { ComponentName(it, AudioService::class.java) },
+            connectionCallbacks,
+            null //optional Bundle
+        )
+
+/*        val recyclerView = binding.audioList
         audioAdapter = AudioAdapter(this, audioList, this)
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = audioAdapter
-        mediaPlayer = MediaPlayer()
-        Log.i("AudioFragment: ", "MediaPlayer instantiated")
+        recyclerView.adapter = audioAdapter*/
 
         return binding.root
     }
@@ -58,77 +108,50 @@ class AudioFragment : Fragment(), AudioListener {
         binding.buttonAudioToMain.setOnClickListener {
             findNavController().navigate(R.id.action_AudioFragment_to_MainFragment)
         }
-
-//        binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-//            override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
-//                if (b) {
-//                    mediaPlayer!!.seekTo(i * 1000)
-//                }
-//            }
-//
-//            override fun onStartTrackingTouch(seekBar: SeekBar) {
-//            }
-//
-//            override fun onStopTrackingTouch(seekBar: SeekBar) {
-//            }
-//        })
     }
 
-//    private fun initializeSeekBar() {
-//        binding.seekBar.max = mediaPlayer!!.seconds
-//
-//        runnable = Runnable {
-//            binding.seekBar.progress = mediaPlayer!!.currentSeconds
-//
-//            handler.postDelayed(runnable, 1000)
-//        }
-//        handler.postDelayed(runnable, 1000)
-//    }
-//
-//    val MediaPlayer.seconds:Int
-//        get() {
-//            return this.duration / 1000
-//        }
-//
-//    val MediaPlayer.currentSeconds:Int
-//        get() {
-//            return this.currentPosition/1000
-//        }
+    private fun buildTransportProtocols() {
+        val mediaController = MediaControllerCompat.getMediaController(context as Activity)
+        // Grab the view for the play/pause button
+        binding.displayAudioText.setOnClickListener {
+                // Since this is a play/pause button, you'll need to test the current state
+                // and choose the action accordingly
 
-    override fun onAudioClickListener(position: Int) {
+                val pbState = mediaController.playbackState.state
+                if (pbState == PlaybackStateCompat.STATE_PLAYING) {
+                    mediaController.transportControls.pause()
+                } else {
+                    mediaController.transportControls.play()
+                }
+            }
 
-        if (mediaPlayer!!.isPlaying) {
-            mediaPlayer!!.stop()
-            mediaPlayer!!.reset()
-//            mediaPlayer.release()
-            Log.i("AudioFragment", "mediaplayer released/reset")
-        }
+        // Display the initial state
+        val metadata = mediaController.metadata
+        val pbState = mediaController.playbackState
 
-        var uri: String =  Uri.Builder().scheme(ContentResolver.SCHEME_ANDROID_RESOURCE).authority("com.example.android.botify").path(audioList[position].audio.toString()).build().toString()
+        // Register a Callback to stay in sync
+        mediaController.registerCallback(controllerCallbacks)
+    }
 
-        binding.displayAudioText.text = audioList[position].name
-        activity?.let { mediaPlayer!!.setDataSource(it, Uri.parse(uri)) }
-        mediaPlayer!!.prepare()
-        mediaPlayer!!.start()
-//        initializeSeekBar()
+    override fun onStart() {
+        super.onStart()
+        audioBrowser.connect()
+    }
+
+    override fun onResume() {
+        super.onResume()
+//        volumeControlStream = AudioManager.STREAM_MUSIC
     }
 
     override fun onStop() {
         Log.i("AudioFragment", "onStop Called")
-        if (mediaPlayer!!.isPlaying) {
-            mediaPlayer!!.stop()
-        }
-        mediaPlayer!!.reset()
-        var delete: Boolean? = context?.cacheDir?.delete()
-        Log.i("Deleted?", delete?.toString()!!)
         super.onStop()
+        MediaControllerCompat.getMediaController(context as Activity)?.unregisterCallback(controllerCallbacks)
 
     }
 
     override fun onDestroy() {
         Log.i("AudioFragment: ", "onDestroy called")
-        mediaPlayer!!.release()
-        mediaPlayer = null
         super.onDestroy()
     }
 }
