@@ -131,8 +131,9 @@ class AudioFragment : Fragment()/*, AudioListener*/ {
 
         val mediaController = MediaControllerCompat.getMediaController(context as Activity)
 //LOG
-        Log.i(LOG_TAG, mediaController.toString())
-        Log.i(LOG_TAG, mediaController.isSessionReady().toString())
+        Log.i(LOG_TAG, "$methodName mC: " + mediaController.toString())
+        Log.i(LOG_TAG, "$methodName mC: " + mediaController.sessionToken)
+        Log.i(LOG_TAG, "$methodName mC S?: " + mediaController.isSessionReady().toString())
 
         // Grab the view for the play/pause button
         binding.displayAudioText.setOnClickListener {
@@ -142,19 +143,19 @@ class AudioFragment : Fragment()/*, AudioListener*/ {
 //LOG
             Log.i(LOG_TAG, "$methodName + sOCL")
 //LOG
-                val pbState = mediaController.playbackState.state
-                Log.i(LOG_TAG, mediaController.playbackState.toString())
+            val pbState = mediaController.playbackState.state
+            Log.i(LOG_TAG, "$methodName mC pS?: " + pbState.toString())
 //LOG
-                if (pbState == PlaybackStateCompat.STATE_PLAYING) {
-                    Log.i(LOG_TAG, "if1" + mediaController.playbackState.toString())
-                    mediaController.transportControls.pause()
-                    Log.i(LOG_TAG, "if2" + mediaController.playbackState.toString())
-                } else {
-                    Log.i(LOG_TAG, "else1" + mediaController.playbackState.toString())
-                    mediaController.transportControls.play()
-                    Log.i(LOG_TAG, "else2" + mediaController.playbackState.toString())
-                }
+            if (pbState == PlaybackStateCompat.STATE_PLAYING) {
+                Log.i(LOG_TAG, "if1" + pbState.toString())
+                mediaController.transportControls.pause()
+                Log.i(LOG_TAG, "if2" + pbState.toString())
+            } else {
+                Log.i(LOG_TAG, "else 1: " + pbState.toString())
+                mediaController.transportControls.play()
+                Log.i(LOG_TAG, "else2 : " + pbState.toString())
             }
+        }
 
         // Display the initial state
         val metadata = mediaController.metadata
