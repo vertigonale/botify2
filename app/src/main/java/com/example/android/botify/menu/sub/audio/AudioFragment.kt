@@ -114,6 +114,7 @@ class AudioFragment : Fragment()/*, AudioListener*/ {
         val mediaController = MediaControllerCompat.getMediaController(context as Activity)
         // Grab the view for the play/pause button
         binding.displayAudioText.setOnClickListener {
+
                 // Since this is a play/pause button, you'll need to test the current state
                 // and choose the action accordingly
 
