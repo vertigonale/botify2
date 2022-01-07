@@ -1,45 +1,65 @@
 package com.example.android.botify.menu.sub.audio
 
+import android.content.ContentResolver
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
-import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import androidx.media.MediaBrowserServiceCompat
+import com.example.android.botify.R
 
 private const val MY_EMPTY_MEDIA_ROOT_ID = "empty_root_id"
 
 class AudioService : MediaBrowserServiceCompat() {
+    private val LOG_TAG = this::class.java.simpleName
 
-    private var audioPlayer: MediaPlayer? = null
-    private var audioSession: MediaSessionCompat? = null
+    private var mediaPlayer: MediaPlayer? = null
+    private var mediaSession: MediaSessionCompat? = null
     private lateinit var stateBuilder: PlaybackStateCompat.Builder
 
     private var audioServiceCallbacks = object : MediaSessionCompat.Callback() {
+//LOG
+        override fun onPlay() {
+            val methodName = object{}.javaClass.enclosingMethod?.name
+            Log.i(LOG_TAG, methodName!!)
 
-/*        override fun onPlay() {
-            val myUri: Uri = ()
-            audioPlayer?.setDataSource(this@AudioService, myUri).prepare().start()
-        }*/
+            var uri: Uri =  Uri.Builder().scheme(ContentResolver.SCHEME_ANDROID_RESOURCE).authority("com.example.android.botify").path(
+                R.raw.winter_path_of_liars.toString()).build()
 
-        override fun onPause() {
-            audioPlayer?.pause()
+            mediaPlayer?.setDataSource(this@AudioService, uri)
+            mediaPlayer?.prepare()
+            mediaPlayer?.start()
         }
+//LOG
+        override fun onPause() {
+            val methodName = object{}.javaClass.enclosingMethod?.name
+            Log.i(LOG_TAG, methodName!!)
 
+            mediaPlayer?.pause()
+        }
+//LOG
         override fun onStop() {
-            audioPlayer?.stop()
+            val methodName = object{}.javaClass.enclosingMethod?.name
+            Log.i(LOG_TAG, methodName!!)
+
+            mediaPlayer?.stop()
         }
     }
-
+//LOG
     override fun onCreate() {
+        val methodName = object{}.javaClass.enclosingMethod?.name
+        Log.i(LOG_TAG, methodName!!)
+
         super.onCreate()
 
-        audioPlayer = MediaPlayer()
-
+        mediaPlayer = MediaPlayer()
+//LOG
         // Create a MediaSessionCompat
-        audioSession = MediaSessionCompat(baseContext, "AudioServiceTAG").apply {
+        mediaSession = MediaSessionCompat(baseContext, "AudioServiceTAG").apply {
+            Log.i(LOG_TAG, "$methodName + session")
 
             // Enable callbacks from MediaButtons and TransportControls
             setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
@@ -67,6 +87,10 @@ class AudioService : MediaBrowserServiceCompat() {
         clientUid: Int,
         rootHints: Bundle?
     ): BrowserRoot {
+//LOG
+        val methodName = object{}.javaClass.enclosingMethod?.name
+        Log.i(LOG_TAG, methodName!!)
+
         return BrowserRoot(MY_EMPTY_MEDIA_ROOT_ID, null)
     }
 
@@ -74,6 +98,10 @@ class AudioService : MediaBrowserServiceCompat() {
         parentId: String,
         result: Result<MutableList<MediaBrowserCompat.MediaItem>>
     ) {
+//LOG
+        val methodName = object{}.javaClass.enclosingMethod?.name
+        Log.i(LOG_TAG, methodName!!)
+
         TODO("Not yet implemented")
     }
 }

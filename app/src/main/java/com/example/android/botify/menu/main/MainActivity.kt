@@ -10,11 +10,14 @@ import com.example.android.botify.R
 import com.example.android.botify.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    private val LOG_TAG = this::class.java.simpleName
 
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.i("MainActivity", "onCreate")
+        val methodName = object{}.javaClass.enclosingMethod?.name
+        Log.i(LOG_TAG, methodName!!)
+
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setSupportActionBar(binding.toolbar)
@@ -22,10 +25,12 @@ class MainActivity : AppCompatActivity() {
 
     //TODO check if necessary (app runs without crashes when commented out)
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        Log.i("MainActivity", "onCreateOptionsMenu")
+        val methodName = object{}.javaClass.enclosingMethod?.name
+        Log.i(LOG_TAG, methodName!!)
+
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
-        Log.i("MainActivity", "Menu Inflated?")
+            Log.i(LOG_TAG, "$methodName + MenuInflated?")
         return true
     }
 
@@ -40,9 +45,12 @@ class MainActivity : AppCompatActivity() {
 //    }
 
     override fun onDestroy() {
+        val methodName = object{}.javaClass.enclosingMethod?.name
+            Log.i(LOG_TAG, methodName!!)
+
         val delete: Boolean = this.cacheDir.deleteRecursively()
-        Log.i("MainActivity", "onDestroy")
-        Log.i("Delete?", delete.toString())
+        Log.i(LOG_TAG, "$methodName + Delete? $delete")
+
         super.onDestroy()
     }
 }
