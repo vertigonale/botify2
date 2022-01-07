@@ -1,7 +1,12 @@
 package com.example.android.botify.menu.sub.audio
 
 import android.content.ContentResolver
+import android.content.Context
+import android.content.Intent
+import android.drm.DrmStore
+import android.media.AudioManager
 import android.media.MediaPlayer
+import android.media.session.PlaybackState
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
@@ -21,26 +26,45 @@ class AudioService : MediaBrowserServiceCompat() {
     private lateinit var stateBuilder: PlaybackStateCompat.Builder
 
     private var audioServiceCallbacks = object : MediaSessionCompat.Callback() {
-//LOG
+
         override fun onPlay() {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
 
-            var uri: Uri =  Uri.Builder().scheme(ContentResolver.SCHEME_ANDROID_RESOURCE).authority("com.example.android.botify").path(
-                R.raw.winter_path_of_liars.toString()).build()
+            val uri: Uri =  Uri.Builder().scheme(ContentResolver.SCHEME_ANDROID_RESOURCE).authority("com.example.android.botify").path(R.raw.winter_path_of_liars.toString()).build()
 
-            mediaPlayer?.setDataSource(this@AudioService, uri)
-            mediaPlayer?.prepare()
+/*            Log.i(LOG_TAG, "$methodName: " + mediaSession?.isActive)
+            mediaSession?.isActive = true*/
+            Log.i(LOG_TAG, "$methodName: " + mediaSession?.isActive)
+
+            Log.i(LOG_TAG, "$methodName: $mediaPlayer")
+            Log.i(LOG_TAG, "$methodName: $mediaSession")
+            if (stateBuilder.build().state == PlaybackStateCompat.STATE_NONE) {
+                mediaPlayer?.setDataSource(this@AudioService, uri)
+                mediaPlayer?.prepare()
+            }
+
             mediaPlayer?.start()
+            stateBuilder.setState(PlaybackStateCompat.STATE_PLAYING, 0L, 1F)
+            Log.i(LOG_TAG, stateBuilder.build().state.toString())
+
+            mediaSession?.setPlaybackState(stateBuilder.build())
+//            stateBuilder.build()
+            Log.i(LOG_TAG, "$methodName: " + mediaSession?.isActive)
         }
-//LOG
+
         override fun onPause() {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
 
             mediaPlayer?.pause()
+
+            stateBuilder.setState(PlaybackStateCompat.STATE_PAUSED, 0L, 1F)
+            Log.i(LOG_TAG, stateBuilder.build().state.toString())
+
+            mediaSession?.setPlaybackState(stateBuilder.build())
         }
-//LOG
+
         override fun onStop() {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
@@ -48,7 +72,7 @@ class AudioService : MediaBrowserServiceCompat() {
             mediaPlayer?.stop()
         }
     }
-//LOG
+
     override fun onCreate() {
         val methodName = object{}.javaClass.enclosingMethod?.name
         Log.i(LOG_TAG, methodName!!)
@@ -56,7 +80,7 @@ class AudioService : MediaBrowserServiceCompat() {
         super.onCreate()
 
         mediaPlayer = MediaPlayer()
-//LOG
+
         // Create a MediaSessionCompat
         mediaSession = MediaSessionCompat(baseContext, "AudioServiceTAG").apply {
             Log.i(LOG_TAG, "$methodName + session")
@@ -87,7 +111,6 @@ class AudioService : MediaBrowserServiceCompat() {
         clientUid: Int,
         rootHints: Bundle?
     ): BrowserRoot {
-//LOG
         val methodName = object{}.javaClass.enclosingMethod?.name
         Log.i(LOG_TAG, methodName!!)
 
@@ -98,10 +121,18 @@ class AudioService : MediaBrowserServiceCompat() {
         parentId: String,
         result: Result<MutableList<MediaBrowserCompat.MediaItem>>
     ) {
-//LOG
         val methodName = object{}.javaClass.enclosingMethod?.name
         Log.i(LOG_TAG, methodName!!)
 
         TODO("Not yet implemented")
+    }
+
+    override fun onDestroy() {
+        val methodName = object{}.javaClass.enclosingMethod?.name
+        Log.i(LOG_TAG, methodName!!)
+
+/*        mediaPlayer?.reset()
+        mediaPlayer?.release()*/
+        super.onDestroy()
     }
 }
