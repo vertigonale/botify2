@@ -130,10 +130,6 @@ class AudioFragment : Fragment()/*, AudioListener*/ {
 
         val mediaController = MediaControllerCompat.getMediaController(context as Activity)
 
-        Log.i(LOG_TAG, "$methodName mC: " + mediaController.toString())
-        Log.i(LOG_TAG, "$methodName mC: " + mediaController.sessionToken)
-        Log.i(LOG_TAG, "$methodName mC S?: " + mediaController.isSessionReady().toString())
-
         // Grab the view for the play/pause button
         binding.displayAudioText.setOnClickListener {
 
@@ -146,13 +142,9 @@ class AudioFragment : Fragment()/*, AudioListener*/ {
             Log.i(LOG_TAG, "$methodName mC pS?: " + pbState.toString())
 
             if (pbState == PlaybackStateCompat.STATE_PLAYING) {
-                Log.i(LOG_TAG, "if1" + pbState.toString())
                 mediaController.transportControls.pause()
-                Log.i(LOG_TAG, "if2" + pbState.toString())
             } else {
-                Log.i(LOG_TAG, "else 1: " + pbState.toString())
                 mediaController.transportControls.play()
-                Log.i(LOG_TAG, "else2 : " + pbState.toString())
             }
         }
 
