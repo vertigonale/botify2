@@ -1,12 +1,8 @@
 package com.example.android.botify.menu.sub.audio
 
 import android.content.ContentResolver
-import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
-import android.media.AudioManager
 import android.media.MediaPlayer
-import android.media.session.PlaybackState
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
@@ -17,7 +13,7 @@ import android.util.Log
 import androidx.media.MediaBrowserServiceCompat
 import com.example.android.botify.R
 
-private const val MY_EMPTY_MEDIA_ROOT_ID = "empty_root_id"
+private const val MEDIA_ROOT_ID = "root_id"
 
 class AudioService : MediaBrowserServiceCompat() {
     private val LOG_TAG = this::class.java.simpleName
@@ -27,9 +23,10 @@ class AudioService : MediaBrowserServiceCompat() {
     private lateinit var stateBuilder: PlaybackStateCompat.Builder
     private lateinit var metaDataBuilder: MediaMetadataCompat.Builder
 
-    private var currentPosition: Long? = null
+
 
     private var audioServiceCallbacks = object : MediaSessionCompat.Callback() {
+        private var currentPosition: Long? = null
 
         override fun onPlay() {
             val methodName = object{}.javaClass.enclosingMethod?.name
@@ -135,7 +132,7 @@ class AudioService : MediaBrowserServiceCompat() {
         val methodName = object{}.javaClass.enclosingMethod?.name
         Log.i(LOG_TAG, methodName!!)
 
-        return BrowserRoot(MY_EMPTY_MEDIA_ROOT_ID, null)
+        return BrowserRoot(MEDIA_ROOT_ID, null)
     }
 
     override fun onLoadChildren(
