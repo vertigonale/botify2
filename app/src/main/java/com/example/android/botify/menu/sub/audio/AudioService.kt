@@ -31,15 +31,15 @@ class AudioService : MediaBrowserServiceCompat() {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
 
+            val state = stateBuilder.build().state
+
             val uri: Uri =  Uri.Builder().scheme(ContentResolver.SCHEME_ANDROID_RESOURCE).authority("com.example.android.botify").path(R.raw.winter_path_of_liars.toString()).build()
 
-/*            Log.i(LOG_TAG, "$methodName: " + mediaSession?.isActive)
-            mediaSession?.isActive = true*/
             Log.i(LOG_TAG, "$methodName: " + mediaSession?.isActive)
 
             Log.i(LOG_TAG, "$methodName: $mediaPlayer")
             Log.i(LOG_TAG, "$methodName: $mediaSession")
-            if (stateBuilder.build().state == PlaybackStateCompat.STATE_NONE) {
+            if (state == PlaybackStateCompat.STATE_NONE || state == PlaybackStateCompat.STATE_STOPPED) {
                 mediaPlayer?.setDataSource(this@AudioService, uri)
                 mediaPlayer?.prepare()
             }
@@ -49,7 +49,7 @@ class AudioService : MediaBrowserServiceCompat() {
             Log.i(LOG_TAG, stateBuilder.build().state.toString())
 
             mediaSession?.setPlaybackState(stateBuilder.build())
-//            stateBuilder.build()
+
             Log.i(LOG_TAG, "$methodName: " + mediaSession?.isActive)
         }
 
@@ -70,6 +70,9 @@ class AudioService : MediaBrowserServiceCompat() {
             Log.i(LOG_TAG, methodName!!)
 
             mediaPlayer?.stop()
+
+            stateBuilder.setState(PlaybackStateCompat.STATE_STOPPED, 0L, 1F)
+            Log.i(LOG_TAG, stateBuilder.build().state.toString())
         }
     }
 
