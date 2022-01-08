@@ -30,7 +30,7 @@ class AudioFragment : Fragment()/*, AudioListener*/ {
 //    private lateinit var volumeControlStream: AudioManager.AudioPlaybackCallback
 
     private val connectionCallbacks = object : MediaBrowserCompat.ConnectionCallback() {
-//LOG
+
         override fun onConnected() {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
@@ -46,13 +46,13 @@ class AudioFragment : Fragment()/*, AudioListener*/ {
 
             buildTransportProtocols()
         }
-//LOG
+
         override fun onConnectionSuspended() {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
 //            super.onConnectionSuspended()
         }
-//LOG
+
         override fun onConnectionFailed() {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
@@ -61,21 +61,21 @@ class AudioFragment : Fragment()/*, AudioListener*/ {
     }
 
     private var controllerCallbacks = object : MediaControllerCompat.Callback() {
-//LOG
+
         override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
 
             super.onMetadataChanged(metadata)
         }
-//LOG
+
         override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
 
             super.onPlaybackStateChanged(state)
         }
-//LOG
+
         override fun onSessionDestroyed() {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
@@ -85,7 +85,6 @@ class AudioFragment : Fragment()/*, AudioListener*/ {
         }
     }
 
-//LOG
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -102,7 +101,7 @@ class AudioFragment : Fragment()/*, AudioListener*/ {
             connectionCallbacks,
             null //optional Bundle
         )
-//LOG
+
         Log.i(LOG_TAG, "$methodName + audioBrowser")
 
 /*        val recyclerView = binding.audioList
@@ -113,7 +112,7 @@ class AudioFragment : Fragment()/*, AudioListener*/ {
 
         return binding.root
     }
-//LOG
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val methodName = object{}.javaClass.enclosingMethod?.name
         Log.i(LOG_TAG, methodName!!)
@@ -124,13 +123,13 @@ class AudioFragment : Fragment()/*, AudioListener*/ {
             findNavController().navigate(R.id.action_AudioFragment_to_MainFragment)
         }
     }
-//LOG
+
     private fun buildTransportProtocols() {
         val methodName = object{}.javaClass.enclosingMethod?.name
         Log.i(LOG_TAG, methodName!!)
 
         val mediaController = MediaControllerCompat.getMediaController(context as Activity)
-//LOG
+
         Log.i(LOG_TAG, "$methodName mC: " + mediaController.toString())
         Log.i(LOG_TAG, "$methodName mC: " + mediaController.sessionToken)
         Log.i(LOG_TAG, "$methodName mC S?: " + mediaController.isSessionReady().toString())
@@ -140,12 +139,12 @@ class AudioFragment : Fragment()/*, AudioListener*/ {
 
                 // Since this is a play/pause button, you'll need to test the current state
                 // and choose the action accordingly
-//LOG
+
             Log.i(LOG_TAG, "$methodName + sOCL")
-//LOG
+
             val pbState = mediaController.playbackState.state
             Log.i(LOG_TAG, "$methodName mC pS?: " + pbState.toString())
-//LOG
+
             if (pbState == PlaybackStateCompat.STATE_PLAYING) {
                 Log.i(LOG_TAG, "if1" + pbState.toString())
                 mediaController.transportControls.pause()
@@ -164,7 +163,7 @@ class AudioFragment : Fragment()/*, AudioListener*/ {
         // Register a Callback to stay in sync
         mediaController.registerCallback(controllerCallbacks)
     }
-//LOG
+
     override fun onStart() {
         val methodName = object{}.javaClass.enclosingMethod?.name
         Log.i(LOG_TAG, methodName!!)
@@ -173,7 +172,7 @@ class AudioFragment : Fragment()/*, AudioListener*/ {
 
         mediaBrowser.connect()
     }
-//LOG
+
     override fun onResume() {
         val methodName = object{}.javaClass.enclosingMethod?.name
         Log.i(LOG_TAG, methodName!!)
@@ -181,7 +180,7 @@ class AudioFragment : Fragment()/*, AudioListener*/ {
         super.onResume()
 //        volumeControlStream = AudioManager.STREAM_MUSIC
     }
-//LOG
+
     override fun onStop() {
         val methodName = object{}.javaClass.enclosingMethod?.name
         Log.i(LOG_TAG, methodName!!)
@@ -191,7 +190,7 @@ class AudioFragment : Fragment()/*, AudioListener*/ {
         MediaControllerCompat.getMediaController(context as Activity)?.unregisterCallback(controllerCallbacks)
 
     }
-//LOG
+
     override fun onDestroy() {
         val methodName = object{}.javaClass.enclosingMethod?.name
         Log.i(LOG_TAG, methodName!!)
