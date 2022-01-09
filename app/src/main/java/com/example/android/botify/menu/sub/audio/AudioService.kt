@@ -28,7 +28,7 @@ class AudioService : MediaBrowserServiceCompat() {
     private var audioServiceCallbacks = object : MediaSessionCompat.Callback() {
         private var currentPosition: Long? = null
 
-        override fun onPlay() {
+        override fun onPlayFromUri(uri: Uri?, extras: Bundle?) {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
 
@@ -38,10 +38,8 @@ class AudioService : MediaBrowserServiceCompat() {
 
             val state = stateBuilder.build().state
 
-            val uri: Uri =  Uri.Builder().scheme(ContentResolver.SCHEME_ANDROID_RESOURCE).authority("com.example.android.botify").path(R.raw.winter_path_of_liars.toString()).build()
-
             if (state == PlaybackStateCompat.STATE_NONE || state == PlaybackStateCompat.STATE_STOPPED) {
-                mediaPlayer?.setDataSource(this@AudioService, uri)
+                mediaPlayer?.setDataSource(this@AudioService, uri!!)
                 mediaPlayer?.prepare()
             }
 
@@ -53,6 +51,29 @@ class AudioService : MediaBrowserServiceCompat() {
             Log.i(LOG_TAG, "$methodName: pB state: " + stateBuilder.build().state.toString())
 
             mediaSession?.setPlaybackState(stateBuilder.build())
+        }
+
+        override fun onPlay() {
+            val methodName = object{}.javaClass.enclosingMethod?.name
+            Log.i(LOG_TAG, methodName!!)
+
+            val state = stateBuilder.build().state
+            Log.i(LOG_TAG, "$methodName iniState: " + state)
+
+            if (state == PlaybackStateCompat.STATE_PAUSED) {
+                startService(Intent(this@AudioService, MediaBrowserServiceCompat::class.java))
+
+                mediaSession?.isActive = true
+
+                mediaPlayer?.start()
+
+                currentPosition = mediaPlayer?.currentPosition?.toLong()
+
+                stateBuilder.setState(PlaybackStateCompat.STATE_PLAYING, currentPosition!!, 1F)
+                Log.i(LOG_TAG, "$methodName: pB state: " + stateBuilder.build().state.toString())
+
+                mediaSession?.setPlaybackState(stateBuilder.build())
+            }
         }
 
         override fun onPause() {
@@ -74,6 +95,7 @@ class AudioService : MediaBrowserServiceCompat() {
             Log.i(LOG_TAG, methodName!!)
 
             mediaPlayer?.stop()
+            mediaPlayer?.reset()
 
             stateBuilder.setState(PlaybackStateCompat.STATE_STOPPED, 0L, 1F)
             Log.i(LOG_TAG, "$methodName: pB state: " + stateBuilder.build().state.toString())

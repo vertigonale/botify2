@@ -2,6 +2,8 @@ package com.example.android.botify.menu.sub.audio
 
 import android.app.Activity
 import android.content.ComponentName
+import android.content.ContentResolver
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
@@ -14,15 +16,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.botify.R
 import com.example.android.botify.databinding.FragmentAudioBinding
 
-class AudioFragment : Fragment()/*, AudioListener*/ {
+class AudioFragment : Fragment(), AudioListener {
     private val LOG_TAG = this::class.java.simpleName
-/*    // audio adapter
+
     private lateinit var audioAdapter: AudioAdapter
     private val audioList = audioList()
-*/
+
     // binding
     private lateinit var binding: FragmentAudioBinding
 
@@ -104,11 +107,11 @@ class AudioFragment : Fragment()/*, AudioListener*/ {
 
         Log.i(LOG_TAG, "$methodName + audioBrowser")
 
-/*        val recyclerView = binding.audioList
+        val recyclerView = binding.audioList
         audioAdapter = AudioAdapter(this, audioList, this)
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = audioAdapter*/
+        recyclerView.adapter = audioAdapter
 
         return binding.root
     }
@@ -130,23 +133,22 @@ class AudioFragment : Fragment()/*, AudioListener*/ {
 
         val mediaController = MediaControllerCompat.getMediaController(context as Activity)
 
-        // Grab the view for the play/pause button
         binding.displayAudioText.setOnClickListener {
-
                 // Since this is a play/pause button, you'll need to test the current state
                 // and choose the action accordingly
+                val pbStateTest = mediaController.playbackState.state
+                Log.i(LOG_TAG, "$methodName mC pS?: " + pbStateTest.toString())
 
-            Log.i(LOG_TAG, "$methodName + sOCL")
-
-            val pbState = mediaController.playbackState.state
-            Log.i(LOG_TAG, "$methodName mC pS?: " + pbState.toString())
-
-            if (pbState == PlaybackStateCompat.STATE_PLAYING) {
-                mediaController.transportControls.pause()
-            } else {
-                mediaController.transportControls.play()
+                if (pbStateTest == PlaybackStateCompat.STATE_PLAYING) {
+                    Log.i(LOG_TAG, "$methodName + sOCL if 1: " + pbStateTest.toString())
+                    mediaController.transportControls.pause()
+                    Log.i(LOG_TAG, "$methodName + sOCL if 2: " + pbStateTest.toString())
+                } else {
+                    Log.i(LOG_TAG, "$methodName + sOCL else 1: " + pbStateTest.toString())
+                    mediaController.transportControls.play()
+                    Log.i(LOG_TAG, "$methodName + sOCL else 2: " + pbStateTest.toString())
+                }
             }
-        }
 
         // Display the initial state
         val metadata = mediaController.metadata
@@ -156,13 +158,45 @@ class AudioFragment : Fragment()/*, AudioListener*/ {
         mediaController.registerCallback(controllerCallbacks)
     }
 
+    override fun onAudioClickListener(position: Int) {
+        val methodName = object{}.javaClass.enclosingMethod?.name
+        Log.i(LOG_TAG, methodName!!)
+
+        val mediaController = MediaControllerCompat.getMediaController(context as Activity)
+
+        val pbStateTest = mediaController.playbackState.state
+
+        val uri =  Uri.Builder().scheme(ContentResolver.SCHEME_ANDROID_RESOURCE).authority("com.example.android.botify").path(audioList[position].audio.toString()).build()
+
+        Log.i(LOG_TAG, "$methodName mC pS?: " + pbStateTest.toString())
+        Log.i(LOG_TAG, "$methodName uri: " + uri)
+
+        if (pbStateTest == PlaybackStateCompat.STATE_PLAYING || pbStateTest == PlaybackStateCompat.STATE_PAUSED) {
+            mediaController.transportControls.stop()
+        }
+
+        mediaController.transportControls.playFromUri(uri, Bundle.EMPTY)
+
+        //TODO text is not saved when AudioFragment is destroyed -> need for mediaMetaData
+        binding.displayAudioText.text = audioList[position].name
+
+/*        // Display the initial state
+        val metadata = mediaController.metadata
+        val pbState = mediaController.playbackState
+
+        // Register a Callback to stay in sync
+        mediaController.registerCallback(controllerCallbacks)*/
+    }
+
     override fun onStart() {
         val methodName = object{}.javaClass.enclosingMethod?.name
         Log.i(LOG_TAG, methodName!!)
 
         super.onStart()
 
-        mediaBrowser.connect()
+        if (!mediaBrowser.isConnected) {
+            mediaBrowser.connect()
+        }
     }
 
     override fun onResume() {

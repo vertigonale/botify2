@@ -1,6 +1,7 @@
 package com.example.android.botify.menu.sub.audio
 
-import android.media.MediaPlayer
+import android.content.ContentResolver
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ class AudioAdapter(private val context: AudioFragment, private val audioList: Li
 
         init {
             view.setOnClickListener {
+//                val uri  =  Uri.Builder().scheme(ContentResolver.SCHEME_ANDROID_RESOURCE).authority("com.example.android.botify").path(adapterPosition.toString()).build()
                 audioListener.onAudioClickListener(adapterPosition)
             }
         }
