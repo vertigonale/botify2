@@ -43,23 +43,24 @@ class AudioService : MediaBrowserServiceCompat() {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
 
-            audioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN).run {
-                setAudioAttributes(AudioAttributes.Builder(). run {
+/*            audioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN).run {
+                setAudioAttributes(AudioAttributes.Builder().run {
                     setUsage((AudioAttributes.USAGE_MEDIA))
                     setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                     build()
                 })
                 build()
-            }
+            }*/
 
             val result = audioManager.requestAudioFocus(audioFocusRequest)
+            Log.i(LOG_TAG, "$methodName aFR: $audioFocusRequest + $result")
 
             val state = stateBuilder.build().state
 
             if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
                 Log.i(LOG_TAG, "$methodName mP: $mediaPlayer")
                 Log.i(LOG_TAG, "$methodName aM: $audioManager")
-                Log.i(LOG_TAG, "$methodName aFR: $audioFocusRequest")
+                Log.i(LOG_TAG, "$methodName aFR: $audioFocusRequest + $result")
 
                 startService(Intent(this@AudioService, MediaBrowserServiceCompat::class.java))
 
@@ -82,6 +83,7 @@ class AudioService : MediaBrowserServiceCompat() {
             }
         }
 
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun onPlay() {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
@@ -93,7 +95,7 @@ class AudioService : MediaBrowserServiceCompat() {
                 startService(Intent(this@AudioService, MediaBrowserServiceCompat::class.java))
                 Log.i(LOG_TAG, "$methodName mP: $mediaPlayer")
                 Log.i(LOG_TAG, "$methodName aM: $audioManager")
-                Log.i(LOG_TAG, "$methodName aFR: $audioFocusRequest")
+                Log.i(LOG_TAG, "$methodName aFR: $audioFocusRequest + " + audioManager.requestAudioFocus(audioFocusRequest))
 
                 mediaSession?.isActive = true
 
@@ -109,12 +111,14 @@ class AudioService : MediaBrowserServiceCompat() {
             }
         }
 
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun onPause() {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
             Log.i(LOG_TAG, "$methodName mP: $mediaPlayer")
             Log.i(LOG_TAG, "$methodName aM: $audioManager")
-            Log.i(LOG_TAG, "$methodName aFR: $audioFocusRequest")
+            Log.i(LOG_TAG, "$methodName aFR: $audioFocusRequest + " + audioManager.requestAudioFocus(audioFocusRequest))
+
 
             mediaPlayer?.pause()
 
@@ -133,7 +137,7 @@ class AudioService : MediaBrowserServiceCompat() {
 
             Log.i(LOG_TAG, "$methodName mP: $mediaPlayer")
             Log.i(LOG_TAG, "$methodName aM: $audioManager")
-            Log.i(LOG_TAG, "$methodName aFR: $audioFocusRequest")
+            Log.i(LOG_TAG, "$methodName aFR: $audioFocusRequest + " + audioManager.requestAudioFocus(audioFocusRequest))
 
             mediaPlayer?.stop()
             mediaPlayer?.reset()
@@ -148,11 +152,13 @@ class AudioService : MediaBrowserServiceCompat() {
 
             audioManager.abandonAudioFocusRequest(audioFocusRequest)
             Log.i(LOG_TAG, "$methodName ab-aFR: $audioFocusRequest")
+            Log.i(LOG_TAG, "$methodName aFR: $audioFocusRequest + " + audioManager.requestAudioFocus(audioFocusRequest))
 
             stopSelf()
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate() {
         val methodName = object{}.javaClass.enclosingMethod?.name
         Log.i(LOG_TAG, methodName!!)
@@ -164,6 +170,17 @@ class AudioService : MediaBrowserServiceCompat() {
 
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         Log.i(LOG_TAG, "$methodName aM: $audioManager")
+
+        audioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN).run {
+            setAudioAttributes(AudioAttributes.Builder(). run {
+                setUsage((AudioAttributes.USAGE_MEDIA))
+                setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                build()
+            })
+            build()
+        }
+
+        Log.i(LOG_TAG, "$methodName aFR: $audioFocusRequest + " + audioManager.requestAudioFocus(audioFocusRequest))
 
         // Create a MediaSessionCompat
         mediaSession = MediaSessionCompat(baseContext, "AudioServiceTAG").apply {
