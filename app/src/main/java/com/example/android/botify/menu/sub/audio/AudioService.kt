@@ -1,15 +1,21 @@
 package com.example.android.botify.menu.sub.audio
 
 import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
+import android.media.AudioAttributes
+import android.media.AudioFocusRequest
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.media.MediaBrowserServiceCompat
 import com.example.android.botify.R
 
@@ -20,6 +26,10 @@ class AudioService : MediaBrowserServiceCompat() {
 
     private var mediaPlayer: MediaPlayer? = null
     private var mediaSession: MediaSessionCompat? = null
+
+    private lateinit var audioManager: AudioManager
+    private lateinit var audioFocusRequest: AudioFocusRequest
+//    private lateinit var audioFocusChangeListener: AudioManager.OnAudioFocusChangeListener
     private lateinit var stateBuilder: PlaybackStateCompat.Builder
     private lateinit var metaDataBuilder: MediaMetadataCompat.Builder
 
@@ -28,29 +38,48 @@ class AudioService : MediaBrowserServiceCompat() {
     private var audioServiceCallbacks = object : MediaSessionCompat.Callback() {
         private var currentPosition: Long? = null
 
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun onPlayFromUri(uri: Uri?, extras: Bundle?) {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
 
-            startService(Intent(this@AudioService, MediaBrowserServiceCompat::class.java))
+            audioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN).run {
+                setAudioAttributes(AudioAttributes.Builder(). run {
+                    setUsage((AudioAttributes.USAGE_MEDIA))
+                    setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    build()
+                })
+                build()
+            }
 
-            mediaSession?.isActive = true
+            val result = audioManager.requestAudioFocus(audioFocusRequest)
 
             val state = stateBuilder.build().state
 
-            if (state == PlaybackStateCompat.STATE_NONE || state == PlaybackStateCompat.STATE_STOPPED) {
-                mediaPlayer?.setDataSource(this@AudioService, uri!!)
-                mediaPlayer?.prepare()
+            if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                Log.i(LOG_TAG, "$methodName mP: $mediaPlayer")
+                Log.i(LOG_TAG, "$methodName aM: $audioManager")
+                Log.i(LOG_TAG, "$methodName aFR: $audioFocusRequest")
+
+                startService(Intent(this@AudioService, MediaBrowserServiceCompat::class.java))
+
+                mediaSession?.isActive = true
+
+                if (state == PlaybackStateCompat.STATE_NONE || state == PlaybackStateCompat.STATE_STOPPED) {
+                    mediaPlayer?.setDataSource(this@AudioService, uri!!)
+                    mediaPlayer?.prepare()
+                }
+
+
+                mediaPlayer?.start()
+
+                currentPosition = mediaPlayer?.currentPosition?.toLong()
+
+                stateBuilder.setState(PlaybackStateCompat.STATE_PLAYING, currentPosition!!, 1F)
+                Log.i(LOG_TAG, "$methodName: pB state: " + stateBuilder.build().state.toString())
+
+                mediaSession?.setPlaybackState(stateBuilder.build())
             }
-
-            mediaPlayer?.start()
-
-            currentPosition = mediaPlayer?.currentPosition?.toLong()
-
-            stateBuilder.setState(PlaybackStateCompat.STATE_PLAYING, currentPosition!!, 1F)
-            Log.i(LOG_TAG, "$methodName: pB state: " + stateBuilder.build().state.toString())
-
-            mediaSession?.setPlaybackState(stateBuilder.build())
         }
 
         override fun onPlay() {
@@ -62,10 +91,14 @@ class AudioService : MediaBrowserServiceCompat() {
 
             if (state == PlaybackStateCompat.STATE_PAUSED) {
                 startService(Intent(this@AudioService, MediaBrowserServiceCompat::class.java))
+                Log.i(LOG_TAG, "$methodName mP: $mediaPlayer")
+                Log.i(LOG_TAG, "$methodName aM: $audioManager")
+                Log.i(LOG_TAG, "$methodName aFR: $audioFocusRequest")
 
                 mediaSession?.isActive = true
 
                 mediaPlayer?.start()
+
 
                 currentPosition = mediaPlayer?.currentPosition?.toLong()
 
@@ -79,6 +112,9 @@ class AudioService : MediaBrowserServiceCompat() {
         override fun onPause() {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
+            Log.i(LOG_TAG, "$methodName mP: $mediaPlayer")
+            Log.i(LOG_TAG, "$methodName aM: $audioManager")
+            Log.i(LOG_TAG, "$methodName aFR: $audioFocusRequest")
 
             mediaPlayer?.pause()
 
@@ -90,12 +126,18 @@ class AudioService : MediaBrowserServiceCompat() {
             mediaSession?.setPlaybackState(stateBuilder.build())
         }
 
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun onStop() {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
 
+            Log.i(LOG_TAG, "$methodName mP: $mediaPlayer")
+            Log.i(LOG_TAG, "$methodName aM: $audioManager")
+            Log.i(LOG_TAG, "$methodName aFR: $audioFocusRequest")
+
             mediaPlayer?.stop()
             mediaPlayer?.reset()
+
 
             stateBuilder.setState(PlaybackStateCompat.STATE_STOPPED, 0L, 1F)
             Log.i(LOG_TAG, "$methodName: pB state: " + stateBuilder.build().state.toString())
@@ -103,6 +145,9 @@ class AudioService : MediaBrowserServiceCompat() {
             mediaSession?.setPlaybackState(stateBuilder.build())
 
             mediaSession?.isActive = false
+
+            audioManager.abandonAudioFocusRequest(audioFocusRequest)
+            Log.i(LOG_TAG, "$methodName ab-aFR: $audioFocusRequest")
 
             stopSelf()
         }
@@ -115,6 +160,10 @@ class AudioService : MediaBrowserServiceCompat() {
         super.onCreate()
 
         mediaPlayer = MediaPlayer()
+        Log.i(LOG_TAG, "$methodName mP: $mediaPlayer")
+
+        audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        Log.i(LOG_TAG, "$methodName aM: $audioManager")
 
         // Create a MediaSessionCompat
         mediaSession = MediaSessionCompat(baseContext, "AudioServiceTAG").apply {
@@ -170,6 +219,9 @@ class AudioService : MediaBrowserServiceCompat() {
     override fun onDestroy() {
         val methodName = object{}.javaClass.enclosingMethod?.name
         Log.i(LOG_TAG, methodName!!)
+
+        mediaPlayer?.reset()
+        mediaPlayer?.release()
 
 /*        mediaPlayer?.reset()
         mediaPlayer?.release()*/
