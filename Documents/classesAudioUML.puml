@@ -74,7 +74,10 @@ package "menu" {
             interface AudioListener {
                 onAudioClickListener(Int): Unit
             }
-        'TODO how to handle "Audios.kt"
+            'TODO how to handle "Audios.kt"
+            entity Audios {
+                audioList(): List<Audio>
+            }
         }
     }
 }
