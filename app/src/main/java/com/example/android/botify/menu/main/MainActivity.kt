@@ -19,13 +19,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 //    private lateinit var menuTitle: String
 
-    companion object {
-        private var audioFragment: AudioFragment
-        init {
-            audioFragment = AudioFragment()
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         val methodName = object{}.javaClass.enclosingMethod?.name
         Log.i(LOG_TAG, methodName!!)
@@ -57,22 +50,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.play_pause -> {
 
                     // TODO play pause
-                    val mediaController = audioFragment.getMediaController()
 
-                    if (mediaController != null) {
-                        val pbStateTest = mediaController.playbackState?.state
-                        Log.i(LOG_TAG, "$methodName mC pS?: " + pbStateTest.toString())
-
-                        if (pbStateTest == PlaybackStateCompat.STATE_PLAYING) {
-                            Log.i(LOG_TAG, "$methodName + sOCL if 1: " + pbStateTest.toString())
-                            mediaController.transportControls.pause()
-                            Log.i(LOG_TAG, "$methodName + sOCL if 2: " + pbStateTest.toString())
-                        } else {
-                            Log.i(LOG_TAG, "$methodName + sOCL else 1: " + pbStateTest.toString())
-                            mediaController.transportControls.play()
-                            Log.i(LOG_TAG, "$methodName + sOCL else 2: " + pbStateTest.toString())
-                        }
-                    }
                     // TODO maybe a toast telling there is no audio yet selected
 //                    else {}
 
