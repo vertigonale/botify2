@@ -24,5 +24,15 @@
 
         <include layout="@layout/content_main" />
 
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottomAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/teal_200"
+            style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+            app:menu="@menu/bottom_app_bar"
+            />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

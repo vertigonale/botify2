@@ -39,4 +39,10 @@
         another level.
     </string>
     <string name="biography3">[Tap here for website]</string>
+    <string name="play_pause">play/pause</string>
+    <string name="content_description_play_pause">con_des_play_pause</string>
+    <string name="more">check for more</string>
+    <string name="content_description_more">test_content_more</string>
+    <string name="content_description_menu_name">con_des_menu_name</string>
+    <string name="menu_name">main/sub</string>
 </resources>
