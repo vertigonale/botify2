@@ -43,15 +43,6 @@ class AudioService : MediaBrowserServiceCompat() {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
 
-/*            audioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN).run {
-                setAudioAttributes(AudioAttributes.Builder().run {
-                    setUsage((AudioAttributes.USAGE_MEDIA))
-                    setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    build()
-                })
-                build()
-            }*/
-
             val result = audioManager.requestAudioFocus(audioFocusRequest)
             Log.i(LOG_TAG, "$methodName aFR: $audioFocusRequest + $result")
 
@@ -128,6 +119,8 @@ class AudioService : MediaBrowserServiceCompat() {
             Log.i(LOG_TAG, "$methodName: pB state: " + stateBuilder.build().state.toString())
 
             mediaSession?.setPlaybackState(stateBuilder.build())
+
+//            audioManager.abandonAudioFocusRequest(audioFocusRequest)
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
@@ -171,7 +164,19 @@ class AudioService : MediaBrowserServiceCompat() {
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         Log.i(LOG_TAG, "$methodName aM: $audioManager")
 
+/*        audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
+            when (focusChange) {
+                AudioManager.AUDIOFOCUS_LOSS -> {
+                    audioServiceCallbacks.onPause()
+                }
+                AudioManager.AUDIOFOCUS_GAIN -> {
+                    audioServiceCallbacks.onPlay()
+                }
+            }
+        }*/
+
         audioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN).run {
+//            setOnAudioFocusChangeListener(audioFocusChangeListener)
             setAudioAttributes(AudioAttributes.Builder(). run {
                 setUsage((AudioAttributes.USAGE_MEDIA))
                 setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
