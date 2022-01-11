@@ -199,6 +199,16 @@ class AudioFragment : Fragment(), AudioListener {
         }
     }
 
+    fun getMediaController() : MediaControllerCompat? {
+
+        if (context != null) {
+            val mediaController = MediaControllerCompat.getMediaController(context as Activity)
+            return mediaController
+        } else {
+            return null
+        }
+    }
+
     override fun onResume() {
         val methodName = object{}.javaClass.enclosingMethod?.name
         Log.i(LOG_TAG, methodName!!)
