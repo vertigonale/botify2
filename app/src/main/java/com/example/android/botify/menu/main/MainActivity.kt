@@ -1,6 +1,8 @@
 package com.example.android.botify.menu.main
 
 import android.os.Bundle
+import android.support.v4.media.session.MediaControllerCompat
+import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
@@ -9,12 +11,20 @@ import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import com.example.android.botify.R
 import com.example.android.botify.databinding.ActivityMainBinding
+import com.example.android.botify.menu.sub.audio.AudioFragment
 
 class MainActivity : AppCompatActivity() {
     private val LOG_TAG = this::class.java.simpleName
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var menuTitle: String
+//    private lateinit var menuTitle: String
+
+    companion object {
+        private var audioFragment: AudioFragment
+        init {
+            audioFragment = AudioFragment()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val methodName = object{}.javaClass.enclosingMethod?.name
@@ -45,7 +55,27 @@ class MainActivity : AppCompatActivity() {
         binding.bottomAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.play_pause -> {
+
                     // TODO play pause
+                    val mediaController = audioFragment.getMediaController()
+
+                    if (mediaController != null) {
+                        val pbStateTest = mediaController.playbackState?.state
+                        Log.i(LOG_TAG, "$methodName mC pS?: " + pbStateTest.toString())
+
+                        if (pbStateTest == PlaybackStateCompat.STATE_PLAYING) {
+                            Log.i(LOG_TAG, "$methodName + sOCL if 1: " + pbStateTest.toString())
+                            mediaController.transportControls.pause()
+                            Log.i(LOG_TAG, "$methodName + sOCL if 2: " + pbStateTest.toString())
+                        } else {
+                            Log.i(LOG_TAG, "$methodName + sOCL else 1: " + pbStateTest.toString())
+                            mediaController.transportControls.play()
+                            Log.i(LOG_TAG, "$methodName + sOCL else 2: " + pbStateTest.toString())
+                        }
+                    }
+                    // TODO maybe a toast telling there is no audio yet selected
+//                    else {}
+
                     true
                 }
                 R.id.more -> {
