@@ -1,6 +1,5 @@
 package com.example.android.botify.menu.main
 
-import android.app.Activity
 import android.content.ComponentName
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
@@ -29,6 +28,8 @@ class MainActivity : AppCompatActivity() {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
 
+            Log.i(LOG_TAG, "$methodName con? " + mediaBrowser.isConnected)
+
             mediaBrowser.sessionToken.also { token ->
                 val audioController = MediaControllerCompat(
                     this@MainActivity,
@@ -38,19 +39,19 @@ class MainActivity : AppCompatActivity() {
                 MediaControllerCompat.setMediaController(this@MainActivity, audioController)
             }
 
-            buildTransportProtocols()
+            buildTransportControls()
         }
 
         override fun onConnectionSuspended() {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
-//            super.onConnectionSuspended()
+            super.onConnectionSuspended()
         }
 
         override fun onConnectionFailed() {
             val methodName = object{}.javaClass.enclosingMethod?.name
             Log.i(LOG_TAG, methodName!!)
-//            super.onConnectionFailed()
+            super.onConnectionFailed()
         }
     }
 
@@ -160,7 +161,7 @@ class MainActivity : AppCompatActivity() {
 //        }
 //    }
 
-    private fun buildTransportProtocols() {
+    private fun buildTransportControls() {
         val methodName = object{}.javaClass.enclosingMethod?.name
         Log.i(LOG_TAG, methodName!!)
 
@@ -217,7 +218,6 @@ class MainActivity : AppCompatActivity() {
             Log.i(LOG_TAG, "$methodName mB con? " + mediaBrowser.isConnected)
 
             mediaBrowser.connect()
-            Log.i(LOG_TAG, "$methodName mB con? " + mediaBrowser.isConnected)
         }
 /*        val mediaController = getMainMediaController()
         Log.i(LOG_TAG, "$methodName + $mediaController")*/
