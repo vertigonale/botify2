@@ -75,17 +75,21 @@ package "menu" {
                 onAudioClickListener(Int): Unit
             }
             'TODO how to handle "Audios.kt"
-            entity Audios {
+            class Audios <<(F,orchid)>> {
                 audioList(): List<Audio>
+
             }
+            'note left: "F" for "File"
         }
     }
 }
 
 ' dependencies
     AudioListener <|-- AudioFragment
-    AudioAdapter <|-- AudioViewHolder : (+) inner class
+    AudioAdapter +-- AudioViewHolder
 
 ' output layout
     main-down[hidden]-sub
+    Audio-down[hidden]-Audios
+'    AudioAdapter-down[hidden]-Audio
 @enduml
