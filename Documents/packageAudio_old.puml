@@ -60,6 +60,6 @@ package "menu" {
 
 ' output layout
     Audio-[hidden]-> Audios
-    AudioViewHolder -[hidden]-> Audios
+'    AudioViewHolder -[hidden]-> Audios
     AudioAdapter-[hidden]>Audio
 @enduml
