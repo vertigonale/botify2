@@ -74,25 +74,22 @@ package "menu" {
             interface AudioListener {
                 onAudioClickListener(Int): Unit
             }
-        'TODO how to handle "Audios.kt"
-        }
+            'TODO how to handle "Audios.kt"
+            class Audios <<(F,orchid)>> {
+                audioList(): List<Audio>
 
-        package "video" {
-            class VideoFragment {
-            binding: FragmentVideoBinding
-            onCreateView(LayoutInflater, ViewGroup?, Bundle?): View?
-            onViewCreated(View, Bundle?): Unit
             }
+            note right: "F" for "File"
         }
     }
 }
 
 ' dependencies
     AudioListener <|-- AudioFragment
-    AudioAdapter <|-- AudioViewHolder : (+) inner class
+    AudioAdapter +-- AudioViewHolder
 
 ' output layout
     main-down[hidden]-sub
-    audio-down[hidden]-video
-    AudioFragment-down[hidden]-video
+    Audio-down[hidden]-Audios
+'    AudioAdapter-down[hidden]-Audio
 @enduml
