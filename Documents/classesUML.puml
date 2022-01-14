@@ -80,7 +80,12 @@ package "menu" {
             interface AudioListener {
                 onAudioClickListener(Int): Unit
             }
-        'TODO how to handle "Audios.kt"
+            'TODO how to handle "Audios.kt"
+            class Audios <<(F,orchid)>> {
+                audioList(): List<Audio>
+
+            }
+            note right: "F" for "File"
         }
 
         package "image" {
@@ -154,15 +159,15 @@ package "menu" {
 }
 
 ' dependencies
-    AudioListener <|-- AudioFragment
+/'    AudioListener <|-- AudioFragment
     ImageListener <|-- ImageFragment
     AudioAdapter <|-- AudioViewHolder : (+) inner class
-    ImageAdapter <|-- ImageViewHolder : (+) inner class
+    ImageAdapter <|-- ImageViewHolder : (+) inner class'/
 
 ' output layout
-    main-down[hidden]-sub
+/'    main-down[hidden]-sub
     audio-down[hidden]-about
     about-down[hidden]-image
     image-down[hidden]-audio
-    ' sub-down[hidden]-main
+    ' sub-down[hidden]-main'/
 @enduml
