@@ -1,32 +1,21 @@
 @startuml
-'comment
-
-' packages
 package "menu" {
-    package "main" {
-
-        class MainActivity {
-            binding: ActivityMainBinding
-            onCreate(Bundle?): Unit
-            onCreateOptionsMenu(Menu): Boolean
-            onDestroy(): Unit
-        }
-    }
-
-    package "sub" {
+ package "sub" {
         package "audio" {
 
             class AudioFragment {
+            		LOG_TAG: String!
                 binding: FragmentAudioBinding
-                mediaPlayer: MediaPlayer?
-                runnable: Runnable
-                handler: Handler
-                pause: Boolean
                 audioAdapter: AudioAdapter
                 audioList: List<Audio>
+                mediaController: MediaControllerCompat
+                AudioFragment()
+                onAttach(Context): Unit
                 onCreateView(LayoutInflater, ViewGroup?, Bundle?): View
                 onViewCreated(View, Bundle?): Unit
                 onAudioClickListener(Int): Unit
+                onStart(): Unit
+                onResume(): Unit
                 onStop(): Unit
                 onDestroy(): Unit
             }
@@ -45,7 +34,7 @@ package "menu" {
                 textView: TextView
                 currentAudio: Audio?
             ' TODO what to do with this pain in the ass?
-                <class intializer>
+                <class initialiser>
                 AudioViewHolder(View)
                 bind(Audio): Unit
             }
@@ -75,7 +64,8 @@ package "menu" {
     AudioAdapter +-- AudioViewHolder
 
 ' output layout
-    main-down[hidden]-sub
-    Audio-down[hidden]-Audios
-'    AudioAdapter-down[hidden]-Audio
+    Audio-[hidden]-> Audios
+    AudioViewHolder -[hidden]-> Audios
+    AudioAdapter-[hidden]>Audio
+
 @enduml

@@ -4,20 +4,46 @@
 ' packages
 package "menu" {
 
-    class EntryActivity {
-        binding: ActivityEntryBinding
-    ' TODO should "Unit" be omitted? it basically means "void"
-        onCreate(Bundle?): Unit
-    }
+'    class EntryActivity {
+'    		LOG_TAG: String!
+'        binding: ActivityEntryBinding
+'    ' TODO should "Unit" be omitted? it basically means "void"
+'        onCreate(Bundle?): Unit
+'        onDestroy(): Unit
+'    }
 
     package "main" {
 
         class MainActivity {
+            LOG_TAG: String!
             binding: ActivityMainBinding
+            mediaBrowser: MediaBrowserCompat
+            //connectionCallbacks//
+            //controllerCallbacks//
             onCreate(Bundle?): Unit
             onCreateOptionsMenu(Menu): Boolean
+            buildTransportProtocols(): Unit
+            getMainMediaController(): MediaControllerCompat
+            onStart(): Unit
+            onStop(): Unit
             onDestroy(): Unit
         }
+        
+        class connectionCallbacks <<(O,orange)MediaBrowserCompat.ConnectionCallback()>> {
+        		onConnected(): Unit
+        		onConnectionSuspended(): Unit
+        		onConnectionFailed(): Unit
+        }
+        
+        class controllerCallbacks <<(O,orange)MediaController.Callback()>> {
+        		onMetaDataChanged(MediaMetadataCompat?): Unit
+        		onPlaybackStateChanged(PlaybackStateCompat?): Unit
+        		onSessionDestroyed(): Unit
+        }
+        
+        note "'O' for 'Object'" as N2
+        connectionCallbacks .. N2
+        N2 .. controllerCallbacks
 
         class MainFragment {
             binding: FragmentMainBinding
@@ -31,16 +57,18 @@ package "menu" {
         package "audio" {
 
             class AudioFragment {
+            		LOG_TAG: String!
                 binding: FragmentAudioBinding
-                mediaPlayer: MediaPlayer?
-                runnable: Runnable
-                handler: Handler
-                pause: Boolean
                 audioAdapter: AudioAdapter
                 audioList: List<Audio>
+                mediaController: MediaControllerCompat
+                AudioFragment()
+                onAttach(Context): Unit
                 onCreateView(LayoutInflater, ViewGroup?, Bundle?): View
                 onViewCreated(View, Bundle?): Unit
                 onAudioClickListener(Int): Unit
+                onStart(): Unit
+                onResume(): Unit
                 onStop(): Unit
                 onDestroy(): Unit
             }
@@ -59,7 +87,7 @@ package "menu" {
                 textView: TextView
                 currentAudio: Audio?
             ' TODO what to do with this pain in the ass?
-                <class intializer>
+                <class initialiser>
                 AudioViewHolder(View)
                 bind(Audio): Unit
             }
@@ -87,9 +115,12 @@ package "menu" {
 ' dependencies
     AudioListener <|-- AudioFragment
     AudioAdapter +-- AudioViewHolder
+    MainActivity +-- connectionCallbacks
+    MainActivity +-- controllerCallbacks
 
 ' output layout
-    main-down[hidden]-sub
-    Audio-down[hidden]-Audios
-'    AudioAdapter-down[hidden]-Audio
+		controllerCallbacks -[hidden]> connectionCallbacks
+    main -[hidden]> sub
+    Audio-[hidden]-> Audios
+    AudioAdapter-[hidden]-Audio
 @enduml

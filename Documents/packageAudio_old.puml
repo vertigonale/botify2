@@ -1,18 +1,5 @@
 @startuml
-'comment
-
-' packages
 package "menu" {
-    package "main" {
-
-        class MainActivity {
-            binding: ActivityMainBinding
-            onCreate(Bundle?): Unit
-            onCreateOptionsMenu(Menu): Boolean
-            onDestroy(): Unit
-        }
-    }
-
     package "sub" {
         package "audio" {
 
@@ -75,7 +62,7 @@ package "menu" {
     AudioAdapter +-- AudioViewHolder
 
 ' output layout
-    main-down[hidden]-sub
-    Audio-down[hidden]-Audios
-'    AudioAdapter-down[hidden]-Audio
+    Audio-[hidden]-> Audios
+    AudioViewHolder -[hidden]-> Audios
+    AudioAdapter-[hidden]>Audio
 @enduml
