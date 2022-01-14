@@ -1,0 +1,91 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam defaulttextalignment center
+left to right direction
+actor User as u
+actor User as u2
+
+note as n1
+<b>extend</b>
+(condition: playback start in audio sub menu)
+end note
+
+note as n2
+<b>extend</b>
+(condition: playback start in audio sub menu)
+end note
+
+note as n3
+<b>extend</b>
+(condition: audio sub menu on screen)
+end note
+
+note as n01
+<b>extend</b>
+(condition: audio sub menu on screen)
+end note
+/'
+note as n02
+<b>extend</b>
+
+end note
+
+note as n03
+<b>extend</b>
+
+end note'/
+
+/'note "extend (condition: playback start in audio sub menu)" as n1
+note "extend (condition: playback start in audio sub menu)" as n2
+note "extend (condition: audio sub menu on screen)" as n3'/
+
+
+rectangle "Use Botify" {
+usecase "Browse App" as uc1
+usecase "Listen to Audio" as uc2
+usecase "select track" as uc3
+usecase "pause Audio" as uc4
+/'uc3 .> uc2 : extend
+uc1 .> uc2 : extend'/
+uc2 .> uc4 : include
+uc1 .> uc4 : include
+}
+
+uc2 <.. n1
+n1 .. uc1
+
+uc2 <.. n2
+n2 .. uc1
+
+uc2 <.. n3
+n3 .. uc3
+
+u --> uc1
+u --> uc2
+
+rectangle "Listen to audio" {
+usecase "Browse App" as uc01
+usecase "browse phone" as uc02
+usecase "select track" as uc03
+usecase "pause Audio" as uc04
+/'uc3 .> uc2 : extend
+uc1 .> uc2 : extend'/
+uc01 .> uc04 : include
+'uc03 .> uc01 : extend
+'uc01 .> uc04 : include
+}
+
+uc01 <.. n01
+n01 .. uc03
+
+/'uc02 <.. n02
+n02 .. uc01
+
+uc02 <.. n03
+n03 .. uc03
+'/
+
+u2 --> uc01
+u2 --> uc02
+
+@enduml

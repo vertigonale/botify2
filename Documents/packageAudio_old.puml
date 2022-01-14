@@ -6,9 +6,6 @@ package "menu" {
             class AudioFragment {
                 binding: FragmentAudioBinding
                 mediaPlayer: MediaPlayer?
-                runnable: Runnable
-                handler: Handler
-                pause: Boolean
                 audioAdapter: AudioAdapter
                 audioList: List<Audio>
                 onCreateView(LayoutInflater, ViewGroup?, Bundle?): View

@@ -1,0 +1,22 @@
+@startuml
+
+left to right direction
+skinparam packageStyle rectangle
+actor User as u
+
+rectangle "Use Botify" {
+usecase "Browse App" as uc1
+usecase "Listen to Audio" as uc2
+usecase "select track" as uc3
+uc2 .> uc3 : include
+}
+
+u --> uc1
+u --> uc2
+
+/'uc0 .> uc2 : include
+uc0 .> uc1 : include
+uc4 .> uc1 : include
+uc2 .> uc1 : extend'/
+
+@enduml
