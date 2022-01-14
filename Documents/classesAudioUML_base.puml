@@ -1,0 +1,95 @@
+@startuml
+'comment
+
+' packages
+package "menu" {
+
+    class EntryActivity {
+        binding: ActivityEntryBinding
+    ' TODO should "Unit" be omitted? it basically means "void"
+        onCreate(Bundle?): Unit
+    }
+
+    package "main" {
+
+        class MainActivity {
+            binding: ActivityMainBinding
+            onCreate(Bundle?): Unit
+            onCreateOptionsMenu(Menu): Boolean
+            onDestroy(): Unit
+        }
+
+        class MainFragment {
+            binding: FragmentMainBinding
+            onCreateView(LayoutInflater, ViewGroup?, Bundle?): View
+            onViewCreated(View, Bundle?): Unit
+            onDestroy(): Unit
+        }
+    }
+
+    package "sub" {
+        package "audio" {
+
+            class AudioFragment {
+                binding: FragmentAudioBinding
+                mediaPlayer: MediaPlayer?
+                runnable: Runnable
+                handler: Handler
+                pause: Boolean
+                audioAdapter: AudioAdapter
+                audioList: List<Audio>
+                onCreateView(LayoutInflater, ViewGroup?, Bundle?): View
+                onViewCreated(View, Bundle?): Unit
+                onAudioClickListener(Int): Unit
+                onStop(): Unit
+                onDestroy(): Unit
+            }
+
+            class AudioAdapter {
+                context: AudioFragment
+                audioList: List<Audio>
+                audioListener: AudioListener
+                AudioAdapter(AudioFragment, List<Audio>, AudioListener)
+                onCreateViewHolder(ViewGroup, Int): AudioAdapter.AudioViewHolder
+                onBindViewHolder(AudioAdapter.AudioViewHolder, Int): Unit
+                getItemCount(): Int
+            }
+
+            class AudioViewHolder {
+                textView: TextView
+                currentAudio: Audio?
+            ' TODO what to do with this pain in the ass?
+                <class intializer>
+                AudioViewHolder(View)
+                bind(Audio): Unit
+            }
+
+            class Audio {
+                id: Long
+                name: String
+                audio: Int?
+                Audio(Long, String, Int?)
+            }
+
+            interface AudioListener {
+                onAudioClickListener(Int): Unit
+            }
+            'TODO how to handle "Audios.kt"
+            class Audios <<(F,orchid)>> {
+                audioList(): List<Audio>
+
+            }
+            note right: "F" for "File"
+        }
+    }
+}
+
+' dependencies
+    AudioListener <|-- AudioFragment
+    AudioAdapter +-- AudioViewHolder
+
+' output layout
+    main-down[hidden]-sub
+    Audio-down[hidden]-Audios
+'    AudioAdapter-down[hidden]-Audio
+@enduml
