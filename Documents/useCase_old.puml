@@ -4,7 +4,7 @@ left to right direction
 skinparam packageStyle rectangle
 actor User as u
 
-rectangle "Use Botify" {
+rectangle "Botify" {
 usecase "Browse App" as uc1
 usecase "Listen to Audio" as uc2
 usecase "select track" as uc3
