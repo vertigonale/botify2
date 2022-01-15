@@ -6,17 +6,17 @@ actor User as u
 /'actor User as u2'/
 
 note as n1
-<b>extend</b>
+<b><<extend>></b>
 (condition: playback start in audio sub menu)
 end note
 
 note as n2
-<b>extend</b>
+<b><<extend>></b>
 (condition: playback start in audio sub menu)
 end note
 
 note as n3
-<b>extend</b>
+<b><<extend>></b>
 (condition: audio sub menu on screen)
 end note
 
@@ -48,11 +48,11 @@ usecase "pause Audio" as uc4
 /'uc3 .> uc2 : extend
 uc1 .> uc2 : extend'/
 uc2 .> uc4 : include
-uc1 .> uc4 : include
+'uc1 .> uc4 : include
 }
 
-uc2 <.. n1
-n1 .. uc1
+uc1 <.. n1
+n1 .. uc4
 
 uc2 <.. n2
 n2 .. uc1
