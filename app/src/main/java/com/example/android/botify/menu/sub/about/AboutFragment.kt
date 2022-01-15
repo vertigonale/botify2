@@ -13,6 +13,7 @@ import com.example.android.botify.R
 import com.example.android.botify.databinding.FragmentAboutBinding
 
 class AboutFragment : Fragment() {
+    private val LOG_TAG = this::class.java.simpleName
 
     private lateinit var binding: FragmentAboutBinding
 

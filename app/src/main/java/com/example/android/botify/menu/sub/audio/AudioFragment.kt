@@ -19,6 +19,7 @@ import com.example.android.botify.R
 import com.example.android.botify.databinding.FragmentAudioBinding
 
 class AudioFragment : Fragment(), AudioListener {
+    private val LOG_TAG = this::class.java.simpleName
 
     // media player
     private var mediaPlayer: MediaPlayer? = null
@@ -38,6 +39,9 @@ class AudioFragment : Fragment(), AudioListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val methodName = object{}.javaClass.enclosingMethod?.name
+        Log.i(LOG_TAG, methodName!!)
+
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_audio, container, false)
 
@@ -53,9 +57,14 @@ class AudioFragment : Fragment(), AudioListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val methodName = object{}.javaClass.enclosingMethod?.name
+        Log.i(LOG_TAG, methodName!!)
+
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonAudioToMain.setOnClickListener {
+            Log.i(LOG_TAG, "$methodName + sOCL")
+
             findNavController().navigate(R.id.action_AudioFragment_to_MainFragment)
         }
 
@@ -96,6 +105,8 @@ class AudioFragment : Fragment(), AudioListener {
 //        }
 
     override fun onAudioClickListener(position: Int) {
+        val methodName = object{}.javaClass.enclosingMethod?.name
+        Log.i(LOG_TAG, methodName!!)
 
         if (mediaPlayer!!.isPlaying) {
             mediaPlayer!!.stop()
@@ -114,7 +125,9 @@ class AudioFragment : Fragment(), AudioListener {
     }
 
     override fun onStop() {
-        Log.i("AudioFragment", "onStop Called")
+        val methodName = object{}.javaClass.enclosingMethod?.name
+        Log.i(LOG_TAG, methodName!!)
+
         if (mediaPlayer!!.isPlaying) {
             mediaPlayer!!.stop()
         }
@@ -126,7 +139,9 @@ class AudioFragment : Fragment(), AudioListener {
     }
 
     override fun onDestroy() {
-        Log.i("AudioFragment: ", "onDestroy called")
+        val methodName = object{}.javaClass.enclosingMethod?.name
+        Log.i(LOG_TAG, methodName!!)
+
         mediaPlayer!!.release()
         mediaPlayer = null
         super.onDestroy()
