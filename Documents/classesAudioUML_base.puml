@@ -58,11 +58,11 @@ package "menu" {
                 onAudioClickListener(Int): Unit
             }
             'TODO how to handle "Audios.kt"
-            class Audios <<(F,orchid)>> {
+            class Audios <<(E,orchid)>> {
                 audioList(): List<Audio>
 
             }
-            note right: "F" for "File"
+            note right: "E" for "Extension"
         }
     }
 }
