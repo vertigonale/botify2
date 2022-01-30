@@ -57,6 +57,7 @@ class AudioService : MediaBrowserServiceCompat() {
 
                 mediaSession?.isActive = true
 
+                //TODO why split responsibility of checking for state on both MediaSession and MediaCOntroller?
                 if (state == PlaybackStateCompat.STATE_NONE || state == PlaybackStateCompat.STATE_STOPPED) {
                     mediaPlayer?.setDataSource(this@AudioService, uri!!)
                     mediaPlayer?.prepare()

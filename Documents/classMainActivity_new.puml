@@ -2,39 +2,37 @@
 'comment
 
 ' packages
-package "menu" {
-    package "main" {
-        class MainActivity {
-            LOG_TAG: String!
-            binding: ActivityMainBinding
-            mediaBrowser: MediaBrowserCompat
-            //connectionCallbacks//
-            //controllerCallbacks//
-            onCreate(Bundle?): Unit
-            onCreateOptionsMenu(Menu): Boolean
-            buildTransportProtocols(): Unit
-            getMainMediaController(): MediaControllerCompat
-            onStart(): Unit
-            onStop(): Unit
-            onDestroy(): Unit
-        }
-
-        class connectionCallbacks <<(O,orange)MediaBrowserCompat.ConnectionCallback()>> {
-        		onConnected(): Unit
-        		onConnectionSuspended(): Unit
-        		onConnectionFailed(): Unit
-        }
-
-        class controllerCallbacks <<(O,orange)MediaController.Callback()>> {
-        		onMetaDataChanged(MediaMetadataCompat?): Unit
-        		onPlaybackStateChanged(PlaybackStateCompat?): Unit
-        		onSessionDestroyed(): Unit
-        }
-
-        note "'O' for 'Object'" as N2
-        connectionCallbacks .. N2
-        N2 .. controllerCallbacks
+package "main" {
+    class MainActivity {
+        LOG_TAG: String!
+        binding: ActivityMainBinding
+        mediaBrowser: MediaBrowserCompat
+        //connectionCallbacks//
+        //controllerCallbacks//
+        onCreate(Bundle?): Unit
+        onCreateOptionsMenu(Menu): Boolean
+        buildTransportProtocols(): Unit
+        getMainMediaController(): MediaControllerCompat
+        onStart(): Unit
+        onStop(): Unit
+        onDestroy(): Unit
     }
+
+    class connectionCallbacks <<(O,orange)MediaBrowserCompat.ConnectionCallback()>> {
+            onConnected(): Unit
+            onConnectionSuspended(): Unit
+            onConnectionFailed(): Unit
+    }
+
+    class controllerCallbacks <<(O,orange)MediaController.Callback()>> {
+            onMetaDataChanged(MediaMetadataCompat?): Unit
+            onPlaybackStateChanged(PlaybackStateCompat?): Unit
+            onSessionDestroyed(): Unit
+    }
+
+    note "'O' for 'Object'" as N2
+    connectionCallbacks .. N2
+    N2 .. controllerCallbacks
 }
 
 ' dependencies
