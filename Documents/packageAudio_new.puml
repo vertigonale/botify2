@@ -1,71 +1,57 @@
 @startuml
-package "menu" {
- package "sub" {
-        package "audio" {
+package "audio" {
 
-            class AudioFragment {
-            		LOG_TAG: String!
-                binding: FragmentAudioBinding
-                audioAdapter: AudioAdapter
-                audioList: List<Audio>
-                mediaController: MediaControllerCompat
-                AudioFragment()
-                onAttach(Context): Unit
-                onCreateView(LayoutInflater, ViewGroup?, Bundle?): View
-                onViewCreated(View, Bundle?): Unit
-                onAudioClickListener(Int): Unit
-                onStart(): Unit
-                onResume(): Unit
-                onStop(): Unit
-                onDestroy(): Unit
-            }
+    class AudioService {
+        LOG_TAG: String!
+        mediaPlayer: MediaPlayer?
+        mediaSession: MediaSessionCompat?
+        audioManager: AudioManager
+        audioFocusRequest: AudioFocusRequest
+        stateBuilder: PlaybackStateCompat.Builder
+        metaDataBuilder: MediaMetadataCompat.Builder
+        //audioServiceCallbacks//
+        onCreate(): Unit
+        onGetRoot(String, Int, Bundle?): MediaBrowserServiceCompat.BrowserRoot
+        onLoadChildren(String, MediaBrowserServiceCompat.Result<MutableList<MediaBrowserCompat.MediaItem>>): Unit
+        onDestroy(): Unit
+    }
 
-            class AudioAdapter {
-                context: AudioFragment
-                audioList: List<Audio>
-                audioListener: AudioListener
-                AudioAdapter(AudioFragment, List<Audio>, AudioListener)
-                onCreateViewHolder(ViewGroup, Int): AudioAdapter.AudioViewHolder
-                onBindViewHolder(AudioAdapter.AudioViewHolder, Int): Unit
-                getItemCount(): Int
-            }
+    class audioServiceCallbacks <<(O,orange)MediaSessionCompat.Callback()>> {
+        currentPosition: Long?
+        onPlayFromUri(Uri?, Bundle?): Unit
+        onPlay(): Unit
+        onPause(): Unit
+        onStop(): Unit
+    }
 
-            class AudioViewHolder {
-                textView: TextView
-                currentAudio: Audio?
-            ' TODO what to do with this pain in the ass?
-                <class initialiser>
-                AudioViewHolder(View)
-                bind(Audio): Unit
-            }
-
-            class Audio {
-                id: Long
-                name: String
-                audio: Int?
-                Audio(Long, String, Int?)
-            }
-
-            interface AudioListener {
-                onAudioClickListener(Int): Unit
-            }
-            'TODO how to handle "Audios.kt"
-            class Audios <<(F,orchid)>> {
-                audioList(): List<Audio>
-
-            }
-            note right: "F" for "File"
-        }
+    note right: "O" for "Object"
+    /' as N1
+        audioServiceCallbacks <.. N1
+'/
+    class AudioFragment {
+            LOG_TAG: String!
+        binding: FragmentAudioBinding
+        audioAdapter: AudioAdapter
+        audioList: List<Audio>
+        mediaController: MediaControllerCompat
+        AudioFragment()
+        onAttach(Context): Unit
+        onCreateView(LayoutInflater, ViewGroup?, Bundle?): View
+        onViewCreated(View, Bundle?): Unit
+        onAudioClickListener(Int): Unit
+        onStart(): Unit
+        onResume(): Unit
+        onStop(): Unit
+        onDestroy(): Unit
     }
 }
 
 ' dependencies
-    AudioListener <|-- AudioFragment
-    AudioAdapter +-- AudioViewHolder
+'    AudioListener <|-- AudioFragment
+    AudioService +-- audioServiceCallbacks
 
 ' output layout
-    Audio-[hidden]-> Audios
-'    AudioViewHolder -[hidden]-> Audios
-    AudioAdapter-[hidden]>Audio
+'	AudioService -[hidden]-> AudioListener
+    AudioFragment -[hidden]->AudioService
 
 @enduml
